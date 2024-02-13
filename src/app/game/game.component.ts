@@ -13,22 +13,49 @@ import { Game } from '../../models/game';
 })
 export class GameComponent {
   pickCardAnimation = false;
-   game!: Game;
-  // game: Game | undefined;
+   game: Game;
+  
 
-  constructor() {}
-
-  ngOnInit(): void {
-    this.newGame();
+  constructor() {
+    this.game = new Game();
+    this.newGame()
   }
 
-  newGame(){
-    this.game = new Game();
-    console.log(this.game);
+ 
 
+  newGame(){
+    console.log(this.game);
   }
 
   takeCard(){
     this.pickCardAnimation = true;
   }
 }
+
+
+
+
+
+
+// pickCardAnimation = false;
+// game!: Game;
+// // game: Game | undefined;
+
+// constructor() {}
+
+// ngOnInit(): void {
+//  this.newGame();
+// }
+
+// newGame(){
+//  this.game = new Game();
+//  console.log(this.game);
+
+// }
+
+// takeCard(){
+//  this.pickCardAnimation = true;
+// }
+// }
+// ------------------< das hier ist eine art lösung und noch eine art entweder ! oder halt | undefined ->
+//-> oder wie wir das jetzt machen im constructor defenieren !!!
