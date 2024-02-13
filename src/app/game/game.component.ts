@@ -13,8 +13,8 @@ import { Game } from '../../models/game';
 })
 export class GameComponent {
   pickCardAnimation = false;
-  // game!: Game;
-  game: Game | undefined;
+   game!: Game;
+  // game: Game | undefined;
 
   constructor() {}
 
