@@ -2,57 +2,42 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Game } from '../../models/game';
 
-
-
 @Component({
   selector: 'app-game',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './game.component.html',
-  styleUrl: './game.component.scss'
+  styleUrl: './game.component.scss',
 })
 export class GameComponent {
   pickCardAnimation = false;
-  currentCard:string | undefined = '';   //  currentCard:string | undefined;   geht auch
+  currentCard: string | undefined = ''; //  currentCard:string | undefined;   geht auch
   game: Game;
-  
 
   constructor() {
     this.game = new Game();
-    this.newGame()
+    this.newGame();
   }
 
- 
-
-  newGame(){
+  newGame() {
     console.log(this.game);
   }
 
-  takeCard(){
-
+  takeCard() {
     if (!this.pickCardAnimation) {
-    this.currentCard = this.game.stack.pop();   // pop nimmt immer das letzt aus dem array
-    
-    if (this.currentCard !== undefined) {
-      this.pickCardAnimation = true;
-      this.game.playedCards.push(this.currentCard);
-    
-      console.log('new card',this.currentCard);
-      console.log('game is',this.game);
-  
-      setTimeout(() => {
-        this.pickCardAnimation = false;
-      }, 1500);
-    
-    }}
+        this.currentCard = this.game.stack.pop(); // pop nimmt immer das letzt aus dem array
+        this.pickCardAnimation = true;
+        console.log('new card', this.currentCard);
+        console.log('game is', this.game);
+        setTimeout(() => {
+          if (this.currentCard !== undefined) {
+            this.game.playedCards.push(this.currentCard);
+            this.pickCardAnimation = false;
+          }
+        }, 1000);
     }
-   
+  }
 }
-
-
-
-
-
 
 // pickCardAnimation = false;
 // game!: Game;
