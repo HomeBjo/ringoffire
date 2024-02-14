@@ -13,7 +13,8 @@ import { Game } from '../../models/game';
 })
 export class GameComponent {
   pickCardAnimation = false;
-   game: Game;
+  currentCard:string | undefined = '';
+  game: Game;
   
 
   constructor() {
@@ -28,8 +29,17 @@ export class GameComponent {
   }
 
   takeCard(){
+
+    if (!this.pickCardAnimation) {
+    this.currentCard = this.game.stack.pop();   // pop nimmt immer das letzt aus dem array
+    console.log(this.currentCard);
     this.pickCardAnimation = true;
-  }
+
+    setTimeout(() => {
+      this.pickCardAnimation = false;
+    }, 1500);
+  
+  }}
 }
 
 
