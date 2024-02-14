@@ -32,14 +32,21 @@ export class GameComponent {
 
     if (!this.pickCardAnimation) {
     this.currentCard = this.game.stack.pop();   // pop nimmt immer das letzt aus dem array
-    console.log(this.currentCard);
-    this.pickCardAnimation = true;
-
-    setTimeout(() => {
-      this.pickCardAnimation = false;
-    }, 1500);
+    
+    if (this.currentCard !== undefined) {
+      this.pickCardAnimation = true;
+      this.game.playedCards.push(this.currentCard);
+    
+      console.log('new card',this.currentCard);
+      console.log('game is',this.game);
   
-  }}
+      setTimeout(() => {
+        this.pickCardAnimation = false;
+      }, 1500);
+    
+    }}
+    }
+   
 }
 
 
