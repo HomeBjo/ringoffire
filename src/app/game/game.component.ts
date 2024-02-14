@@ -13,7 +13,7 @@ import { Game } from '../../models/game';
 })
 export class GameComponent {
   pickCardAnimation = false;
-  currentCard:string | undefined = '';
+  currentCard:string | undefined = '';   //  currentCard:string | undefined;   geht auch
   game: Game;
   
 
