@@ -9,5 +9,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PlayerComponent {
   @Input() name:String | undefined;
-
+  @Input() playerActive : boolean = false;
 }
