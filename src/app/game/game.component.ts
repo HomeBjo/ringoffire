@@ -50,13 +50,16 @@ export class GameComponent {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogAddPlayerComponent, {
+    const dialogRef = this.dialog.open(DialogAddPlayerComponent); 
     
-    });
+    
 
     dialogRef.afterClosed().subscribe(name => {
-      this.game.players.push(name);
-      console.log('The dialog was closed');
+      if (name && name.length > 0) {  // (name &&)exestiert name Überhaupt ist dafür da damit der wens leer ist nicht keine fehler kommt
+        this.game.players.push(name);
+        console.log('The dialog was closed');
+      }
+     
      
     });
   }
