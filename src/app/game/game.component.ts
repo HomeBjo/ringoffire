@@ -37,6 +37,9 @@ export class GameComponent {
         this.pickCardAnimation = true;
         console.log('new card', this.currentCard);
         console.log('game is', this.game);
+
+        this.game.currentPlayer++;
+        this.game.currentPlayer = this.game.currentPlayer % this.game.players.length; // modulo appertor ein rest operartor 
         setTimeout(() => {
           if (this.currentCard !== undefined) {
             this.game.playedCards.push(this.currentCard);
