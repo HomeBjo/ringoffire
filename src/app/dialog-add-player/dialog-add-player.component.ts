@@ -22,8 +22,7 @@ import {MatDialogContent} from '@angular/material/dialog';
 export class DialogAddPlayerComponent {
   name:string ='';
 
- constructor( public dialogRef: MatDialogRef<DialogAddPlayerComponent>
-  ){ }
+ constructor( public dialogRef: MatDialogRef<DialogAddPlayerComponent>){ }
 
  onNoClick(){
   this.dialogRef.close();
