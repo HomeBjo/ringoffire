@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component,inject  } from '@angular/core';
 import { Game } from '../../models/game';
 import { PlayerComponent } from '../player/player.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -9,6 +9,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDialog,MatDialogContent} from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
+import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -17,14 +19,20 @@ import { GameInfoComponent } from '../game-info/game-info.component';
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
 })
+
 export class GameComponent {
   pickCardAnimation = false;
   currentCard: string | undefined = ''; //  currentCard:string | undefined;   geht auch
   game: Game;
+  firestore: Firestore = inject(Firestore);
+  items$!: Observable<any[]>;
 
   constructor(public dialog: MatDialog) {
     this.game = new Game();
     this.newGame();
+    const aCollection = collection(this.firestore,'games')
+    this.items$ = collectionData(aCollection);
+    console.log('hier',aCollection)
   }
 
   newGame() {
