@@ -9,7 +9,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDialog,MatDialogContent} from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -25,24 +25,52 @@ export class GameComponent {
   currentCard: string | undefined = ''; //  currentCard:string | undefined;   geht auch
   game: Game;
   firestore: Firestore = inject(Firestore);
-  items$!: Observable<any[]>;
-  items;
+
+  unsubList;
+  unsubSingle;
+
 
   constructor(public dialog: MatDialog) {
     this.game = new Game();
-    this.newGame();
-    this.items$ = collectionData(this.getNotesRef())
-    this.items=this.items$.subscribe((list) =>{
+    this.unsubList = onSnapshot(this.getNotesRef(),(list)=>{
       list.forEach(element=>{
-        console.log(element)
-      });
-    })
+        console.log('hier2',element.data());
+      })
+    });
 
+    this.unsubSingle = onSnapshot(this.getsingleDocRef("games","YuKmPSUTYGezddEn3qpD"),(element)=>{
+      console.log('hier3',element); 
+    });
+
+    
+
+    this.newGame();
   }
+
+  ngonDestroy(){              // nicht im constructor unsubrciben sons kommt kein consolen log
+    this.unsubList();
+    this.unsubSingle();
+  }
+
+
   getNotesRef(){
     return collection(this.firestore,'games')
   }
+ // das sind referenzen die man brauch beim snapshot oder collektiondata
+  getsingleDocRef(colId:string,docId:string ){
+    return doc(collection(this.firestore,colId),docId)
 
+  }
+
+
+
+
+
+
+
+
+
+ // <!--                                    bestehender code                              -->
   newGame() {
     console.log(this.game);
   }
