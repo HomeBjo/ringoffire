@@ -9,8 +9,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDialog,MatDialogContent} from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
-import { Firestore, collection, collectionData, doc, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -23,44 +24,80 @@ import { Observable } from 'rxjs';
 export class GameComponent {
   pickCardAnimation = false;
   currentCard: string | undefined = ''; //  currentCard:string | undefined;   geht auch
-  game: Game;
+  game!: Game;
   firestore: Firestore = inject(Firestore);
-
   unsubList;
-  unsubSingle;
-
-
-  constructor(public dialog: MatDialog) {
-    this.game = new Game();
+ 
+  
+  constructor(private route: ActivatedRoute,public dialog: MatDialog) {
+   
+    this.route.params.subscribe((params: any)=>{
+      console.log(params.id)
+  })
     this.unsubList = onSnapshot(this.getNotesRef(),(list)=>{
       list.forEach(element=>{
         console.log('hier2',element.data());
       })
     });
-
-    this.unsubSingle = onSnapshot(this.getsingleDocRef("games","YuKmPSUTYGezddEn3qpD"),(element)=>{
-      console.log('hier3',element); 
-    });
-
-    
-
     this.newGame();
   }
 
   ngonDestroy(){              // nicht im constructor unsubrciben sons kommt kein consolen log
     this.unsubList();
-    this.unsubSingle();
   }
 
 
   getNotesRef(){
     return collection(this.firestore,'games')
   }
+
  // das sind referenzen die man brauch beim snapshot oder collektiondata
   getsingleDocRef(colId:string,docId:string ){
     return doc(collection(this.firestore,colId),docId)
 
   }
+
+  async addNote(item:{}){
+    await addDoc(this.getNotesRef(),item).catch(
+      (err)=>{
+        console.error(err)
+      }
+    ).then (
+      (docRef) =>{ console.log('then fehler',docRef); 
+
+      }
+    )
+  }
+
+  newGame() {
+    // console.log(this.game);
+    this.game = new Game();
+    // collection(this.firestore,'games');this.addNote(this.game.toJson())
+  }
+
+//   urlLog(this: any){
+//     this.route.params.subscribe((params: any)=>{
+//         console.log(params)
+//     })
+//  }   //IM CONstuctor DRIN KA WARUM DRAUSEN NET GEHT !!!!!!!
+
+
+
+
+  // new game haben wir doch noch angepasst als try
+
+
+
+  // setNoteObject(obj:any, id:string):Game{
+  //   return {
+  //     id:id,
+  //     type: object.type || "note",
+  //     title: object.title || "",
+  //     content: object.content || "",
+  //     marked: object.marked || false,
+  //   }
+  // }
+  //  bauen wir wohl in der game.ts ein 1!!!!
 
 
 
@@ -71,10 +108,6 @@ export class GameComponent {
 
 
  // <!--                                    bestehender code                              -->
-  newGame() {
-    console.log(this.game);
-  }
-
   takeCard() {
     if (!this.pickCardAnimation) {
         this.currentCard = this.game.stack.pop(); // pop nimmt immer das letzt aus dem array
