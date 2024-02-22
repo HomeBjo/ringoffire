@@ -26,13 +26,21 @@ export class GameComponent {
   game: Game;
   firestore: Firestore = inject(Firestore);
   items$!: Observable<any[]>;
+  items;
 
   constructor(public dialog: MatDialog) {
     this.game = new Game();
     this.newGame();
-    const aCollection = collection(this.firestore,'games')
-    this.items$ = collectionData(aCollection);
-    console.log('hier',aCollection)
+    this.items$ = collectionData(this.getNotesRef())
+    this.items=this.items$.subscribe((list) =>{
+      list.forEach(element=>{
+        console.log(element)
+      });
+    })
+
+  }
+  getNotesRef(){
+    return collection(this.firestore,'games')
   }
 
   newGame() {
