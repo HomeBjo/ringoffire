@@ -26,20 +26,17 @@ export class GameComponent {
   currentCard: string | undefined = ''; //  currentCard:string | undefined;   geht auch
   game!: Game;
   firestore: Firestore = inject(Firestore);
+  // route : ActivatedRoute = inject(ActivatedRoute)   so könnte man das auch machen evt
   unsubList;
  
   
   constructor(private route: ActivatedRoute,public dialog: MatDialog) {
    
     this.route.params.subscribe((params: any)=>{
-      console.log(params.id)
+      console.log('junus',params.id)
   })
-    this.unsubList = onSnapshot(this.getNotesRef(),(list)=>{
-      list.forEach(element=>{
-        console.log('hier2',element.data());
-      })
-    });
-    this.newGame();
+     this.unsubList = this.bekommen();
+     this.newGame();
   }
 
   ngonDestroy(){              // nicht im constructor unsubrciben sons kommt kein consolen log
@@ -73,6 +70,14 @@ export class GameComponent {
     // console.log(this.game);
     this.game = new Game();
     // collection(this.firestore,'games');this.addNote(this.game.toJson())
+  }
+
+  bekommen(){
+    return  onSnapshot(this.getNotesRef(),(list)=>{
+      list.forEach(element=>{
+        console.log('hier2',element.data());
+      })
+    });
   }
 
 //   urlLog(this: any){
