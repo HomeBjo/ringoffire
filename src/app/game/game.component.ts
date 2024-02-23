@@ -9,7 +9,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDialog,MatDialogContent} from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
-import { Firestore, addDoc, collection, collectionData, doc, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc, docData, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -35,14 +35,19 @@ export class GameComponent {
     this.route.params.subscribe((params: any) => {
       console.log('junus', params.id);
   
+
       const singleDocRef = this.getsingleDocRef(params.id);
-      
-      onSnapshot(singleDocRef, (document) => {
-      
-          console.log('hier2', document.data());
-     
-       
-      });
+    
+      docData(singleDocRef).subscribe((game:any) => console.log('docdata game update', document) )
+
+      this.game.currentPlayer = this.game.currentPlayer
+      this.game.playedCards = this.game.playedCards
+      this.game.players = this.game.players
+      this.game.stack = this.game.stack
+      // onSnapshot(singleDocRef, (document) => {
+      // console.log('snapshot game update', document.data());
+
+      // });   //hier die andere methode   und oben die geht genausoo laufen auch beide gleichzeitig
     });
   
     this.newGame();
