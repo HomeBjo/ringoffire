@@ -52,16 +52,17 @@ export class GameComponent {
 
 
       const singleDocRef = this.getsingleDocRef(params.id);
-    
+
       docData(singleDocRef).subscribe((game:any) => {
-        this.game.currentPlayer = this.game.currentPlayer 
-        this.game.playedCards = this.game.playedCards
-        this.game.players = this.game.players
-        this.game.stack = this.game.stack
-        onSnapshot(singleDocRef, (document) => {
-        console.log('snapshot game update', document.data());
-      })
-       });   //hier die andere methode   und oben die geht genausoo laufen auch beide gleichzeitig
+        console.log('docData game update', game)
+        this.game.currentPlayer = game.currentPlayer 
+        this.game.playedCards = game.playedCards
+        this.game.players = game.players
+        this.game.stack = game.stack
+      //   onSnapshot(singleDocRef, (document) => {         //hier die andere methode   und oben die geht genausoo laufen auch beide gleichzeitig
+      //   console.log('snapshot game update', document.data());   
+      // })
+       });   
     });
   
     this.newGame();
@@ -97,7 +98,7 @@ export class GameComponent {
   newGame() {
     // console.log(this.game);
     this.game = new Game();
-    // collection(this.firestore,'games');this.addNote(this.game.toJson())
+    // collection(this.firestore,'games');this.addNote(this.game.toJson())   // lagern wir in start-scrreen.component.ts aus
   }
 
   // gameData(){   auslager versuch !!!!!!!!!!!!!!!!!
