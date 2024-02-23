@@ -37,12 +37,11 @@ export class GameComponent {
   
       const singleDocRef = this.getsingleDocRef(params.id);
       
-      onSnapshot(singleDocRef, (list) => {
-       if (!onSnapshot) {
-        list.forEach((element) => {
-          console.log('hier2', element.data());
-        });
-       }
+      onSnapshot(singleDocRef, (document) => {
+      
+          console.log('hier2', document.data());
+     
+       
       });
     });
   
