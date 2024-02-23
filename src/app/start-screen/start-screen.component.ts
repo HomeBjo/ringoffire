@@ -17,27 +17,20 @@ export class StartScreenComponent {
 
   constructor(private firestore: Firestore, private router: Router ) { }
 
-  newGame(){
-    //start Game
+  async newGame() {
     let game = new Game();
-    collection(this.firestore,'games');this.addNote(game.toJson())
-    .then((gameInfo:any) => {
-        console.log('gucken',gameInfo.id)
-       this.router.navigateByUrl('/game/'+ gameInfo.id);
-    });
     
+    try {
+      const gameInfo: any = await this.addNote(game.toJson());
+      console.log('gucken', gameInfo.id);
+      this.router.navigateByUrl('/game/' + gameInfo.id);
+    } catch (error) {
+      console.error('error game:', error);
+    }
   }
-
+  
   async addNote(item:{}){
-    await addDoc(this.getNotesRef(),item).catch(
-      (err)=>{
-        console.error(err)
-      }
-    ).then (
-      (docRef) =>{ console.log('then fehler',docRef); 
-
-      }
-    )
+    await addDoc(this.getNotesRef(),item)
   }
 
   getNotesRef(){
