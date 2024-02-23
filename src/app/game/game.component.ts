@@ -27,20 +27,30 @@ export class GameComponent {
   game!: Game;
   firestore: Firestore = inject(Firestore);
   // route : ActivatedRoute = inject(ActivatedRoute)   so könnte man das auch machen evt
-  unsubList;
+ 
  
   
   constructor(private route: ActivatedRoute,public dialog: MatDialog) {
    
-    this.route.params.subscribe((params: any)=>{
-      console.log('junus',params.id)
-  })
-     this.unsubList = this.bekommen();
-     this.newGame();
+    this.route.params.subscribe((params: any) => {
+      console.log('junus', params.id);
+  
+      const singleDocRef = this.getsingleDocRef(params.id);
+      
+      onSnapshot(singleDocRef, (list) => {
+       if (!onSnapshot) {
+        list.forEach((element) => {
+          console.log('hier2', element.data());
+        });
+       }
+      });
+    });
+  
+    this.newGame();
   }
 
   ngonDestroy(){              // nicht im constructor unsubrciben sons kommt kein consolen log
-    this.unsubList();
+    
   }
 
 
@@ -49,8 +59,8 @@ export class GameComponent {
   }
 
  // das sind referenzen die man brauch beim snapshot oder collektiondata
-  getsingleDocRef(colId:string,docId:string ){
-    return doc(collection(this.firestore,colId),docId)
+  getsingleDocRef(docId:string ){
+    return doc(collection(this.firestore,'games'),docId)
 
   }
 
@@ -72,13 +82,9 @@ export class GameComponent {
     // collection(this.firestore,'games');this.addNote(this.game.toJson())
   }
 
-  bekommen(){
-    return  onSnapshot(this.getNotesRef(),(list)=>{
-      list.forEach(element=>{
-        console.log('hier2',element.data());
-      })
-    });
-  }
+  // gameData(){   auslager versuch !!!!!!!!!!!!!!!!!
+  //   return   
+  // }
 
 //   urlLog(this: any){
 //     this.route.params.subscribe((params: any)=>{
