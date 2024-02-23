@@ -15,6 +15,7 @@ import { log } from 'console';
 export class StartScreenComponent {
   [x: string]: any;
 
+
   constructor(private firestore: Firestore, private router: Router ) { }
 
   async newGame() {
@@ -29,12 +30,13 @@ export class StartScreenComponent {
     }
   }
   
-  async addNote(item:{}){
-    await addDoc(this.getNotesRef(),item)
+  addNote(item:{}){
+  return addDoc(this.getNotesRef(),item)
   }
 
   getNotesRef(){
     return collection(this.firestore,'games')
   }
 }
+
 
