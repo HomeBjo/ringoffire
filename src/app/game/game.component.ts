@@ -36,18 +36,32 @@ export class GameComponent {
       console.log('junus', params.id);
   
 
+
+      // this.firestore
+      // .getNotesRef(this.firestore,'games')
+      // .doc(params.id)
+      // .valueChanges()
+      // .subscribe((game : any) => {
+      //   console.log('junus test game update',game)
+      // this.game.currentPlayer = game.currentPlayer 
+      // this.game.playedCards = game.playedCards
+      // this.game.players = game.players
+      // this.game.stack = game.stack
+      // })
+
+
+
       const singleDocRef = this.getsingleDocRef(params.id);
     
-      docData(singleDocRef).subscribe((game:any) => console.log('docdata game update', document) )
-
-      this.game.currentPlayer = this.game.currentPlayer
-      this.game.playedCards = this.game.playedCards
-      this.game.players = this.game.players
-      this.game.stack = this.game.stack
-      // onSnapshot(singleDocRef, (document) => {
-      // console.log('snapshot game update', document.data());
-
-      // });   //hier die andere methode   und oben die geht genausoo laufen auch beide gleichzeitig
+      docData(singleDocRef).subscribe((game:any) => {
+        this.game.currentPlayer = this.game.currentPlayer 
+        this.game.playedCards = this.game.playedCards
+        this.game.players = this.game.players
+        this.game.stack = this.game.stack
+        onSnapshot(singleDocRef, (document) => {
+        console.log('snapshot game update', document.data());
+      })
+       });   //hier die andere methode   und oben die geht genausoo laufen auch beide gleichzeitig
     });
   
     this.newGame();
