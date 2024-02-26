@@ -9,7 +9,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDialog,MatDialogContent} from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
-import { Firestore, addDoc, collection, collectionData, doc, docData, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc, docData, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -25,6 +25,7 @@ export class GameComponent {
   pickCardAnimation = false;
   currentCard: string | undefined = ''; //  currentCard:string | undefined;   geht auch
   game!: Game;
+  gameId! : string;  //hier loggen wir gie id aus und speichern die oben *2damit wir die unten in saveGame()
   firestore: Firestore = inject(Firestore);
   // route : ActivatedRoute = inject(ActivatedRoute)   so könnte man das auch machen evt
  
@@ -33,6 +34,7 @@ export class GameComponent {
   constructor(private route: ActivatedRoute,public dialog: MatDialog) {
    
     this.route.params.subscribe((params: any) => {
+      this.gameId = params.id; //hier loggen wir gie id aus und speichern die oben *2 damit wir die unten in saveGame()
       console.log('junus', params.id);
   
 
@@ -83,17 +85,7 @@ export class GameComponent {
 
   }
 
-  async addNote(item:{}){
-    await addDoc(this.getNotesRef(),item).catch(
-      (err)=>{
-        console.error(err)
-      }
-    ).then (
-      (docRef) =>{ console.log('then fehler',docRef); 
 
-      }
-    )
-  }
 
   newGame() {
     // console.log(this.game);
@@ -101,6 +93,16 @@ export class GameComponent {
     // collection(this.firestore,'games');this.addNote(this.game.toJson())   // lagern wir in start-scrreen.component.ts aus
   }
 
+  async saveGame(){
+    const updateGames = this.getsingleDocRef(this.gameId)
+    await updateDoc(updateGames, this.game.toJson());
+  } //ich muss mir den teil hier nochmal angucken und erklären lassen 
+
+
+
+
+
+  
   // gameData(){   auslager versuch !!!!!!!!!!!!!!!!!
   //   return   
   // }
@@ -133,7 +135,17 @@ export class GameComponent {
 
 
 
+  async addNote(item:{}){
+    await addDoc(this.getNotesRef(),item).catch(
+      (err)=>{
+        console.error(err)
+      }
+    ).then (
+      (docRef) =>{ console.log('then fehler',docRef); 
 
+      }
+    )
+  }
 
 
 
@@ -164,6 +176,7 @@ export class GameComponent {
     dialogRef.afterClosed().subscribe(name => {
       if (name && name.length > 0) {  // (name &&)exestiert name Überhaupt ist dafür da damit der wens leer ist nicht keine fehler kommt
         this.game.players.push(name);
+        this.saveGame()
         console.log('The dialog was closed');
       }
      
@@ -172,6 +185,16 @@ export class GameComponent {
   }
 
 }
+
+
+
+
+
+
+
+
+
+
 
 // pickCardAnimation = false;
 // game!: Game;
