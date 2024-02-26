@@ -22,8 +22,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class GameComponent {
-  pickCardAnimation = false;
-  currentCard: string | undefined = ''; //  currentCard:string | undefined;   geht auch
   game!: Game;
   gameId! : string;  //hier loggen wir gie id aus und speichern die oben *2damit wir die unten in saveGame()
   firestore: Firestore = inject(Firestore);
@@ -57,10 +55,12 @@ export class GameComponent {
 
       docData(singleDocRef).subscribe((game:any) => {
         console.log('docData game update', game)
-        this.game.currentPlayer = game.currentPlayer 
-        this.game.playedCards = game.playedCards
-        this.game.players = game.players
-        this.game.stack = game.stack
+        this.game.currentPlayer = game.currentPlayer ;
+        this.game.playedCards = game.playedCards;
+        this.game.players = game.players;
+        this.game.stack = game.stack;
+        this.game.pickCardAnimation = game.pickCardAnimation;
+        this.game.currentCard = game.currentCard;
       //   onSnapshot(singleDocRef, (document) => {         //hier die andere methode   und oben die geht genausoo laufen auch beide gleichzeitig
       //   console.log('snapshot game update', document.data());   
       // })
@@ -151,18 +151,24 @@ export class GameComponent {
 
  // <!--                                    bestehender code                              -->
   takeCard() {
-    if (!this.pickCardAnimation) {
-        this.currentCard = this.game.stack.pop(); // pop nimmt immer das letzt aus dem array
-        this.pickCardAnimation = true;
-        console.log('new card', this.currentCard);
+    if (!this.game.pickCardAnimation) {
+      const card = this.game.stack.pop(); // pop nimmt immer das letzt aus dem array
+        if (card !== undefined) {
+          this.game.currentCard = card;
+          this.game.pickCardAnimation = true;
+        }
+  
+        console.log('new card', this.game.currentCard);
         console.log('game is', this.game);
-
         this.game.currentPlayer++;
         this.game.currentPlayer = this.game.currentPlayer % this.game.players.length; // modulo appertor ein rest operartor 
+        this.saveGame();
         setTimeout(() => {
-          if (this.currentCard !== undefined) {
-            this.game.playedCards.push(this.currentCard);
-            this.pickCardAnimation = false;
+          if (this.game.currentCard !== undefined) {
+            this.game.playedCards.push(this.game.currentCard);
+            this.game.pickCardAnimation = false;
+            this.saveGame();
+           
           }
         }, 1000);
     }

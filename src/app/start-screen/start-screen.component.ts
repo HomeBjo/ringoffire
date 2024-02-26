@@ -40,4 +40,4 @@ export class StartScreenComponent {
 }
 
 
-//ich muss mir den teil hier nochmal angucken und erklären lassen z.b. addDoc 
+//ich muss mir den teil hier nochmal angucken und erklären lassen z.b. addDoc und das game in add note drin auch 
